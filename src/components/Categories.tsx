@@ -19,13 +19,18 @@ export const Categories = () => {
   const currentCategory = searchParams.get("category") || "All";
 
   const handleCategoryClick = (category: string) => {
-    const newParams = new URLSearchParams(searchParams);
-    if (category === "All") {
-      newParams.delete("category");
-    } else {
-      newParams.set("category", category);
-    }
-    setSearchParams(newParams, { replace: true }); // Added replace: true to prevent page refresh
+    setSearchParams(
+      (prev) => {
+        const newParams = new URLSearchParams(prev);
+        if (category === "All") {
+          newParams.delete("category");
+        } else {
+          newParams.set("category", category);
+        }
+        return newParams;
+      },
+      { replace: true }
+    );
   };
 
   return (
