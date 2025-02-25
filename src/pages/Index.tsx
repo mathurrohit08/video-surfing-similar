@@ -7,7 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { UserNav } from "@/components/UserNav";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Upload } from "lucide-react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Video } from "@/types/video";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -23,6 +23,7 @@ const Index = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [title, setTitle] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -55,9 +56,20 @@ const Index = () => {
     }
   };
 
+  const handleTitleClick = () => {
+    if (!selectedFile && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   const handleUpload = () => {
-    if (!selectedFile || !title.trim()) {
-      toast.error("Please provide both a title and a video file");
+    if (!selectedFile) {
+      toast.error("Please select a video file");
+      return;
+    }
+
+    if (!title.trim()) {
+      toast.error("Please provide a title for the video");
       return;
     }
 
@@ -139,6 +151,7 @@ const Index = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter video title"
+                onClick={handleTitleClick}
               />
             </div>
             <div
@@ -148,6 +161,7 @@ const Index = () => {
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
+              onClick={() => fileInputRef.current?.click()}
             >
               <div className="flex flex-col items-center gap-2">
                 <Upload className="h-8 w-8 text-gray-400" />
@@ -155,14 +169,19 @@ const Index = () => {
                   {selectedFile ? selectedFile.name : "Drag & drop your video or click to browse"}
                 </p>
                 <input
+                  ref={fileInputRef}
                   type="file"
                   accept="video/*"
                   onChange={handleFileSelect}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  className="hidden"
                 />
               </div>
             </div>
-            <Button onClick={handleUpload} className="w-full">
+            <Button 
+              onClick={handleUpload} 
+              className="w-full"
+              disabled={!selectedFile || !title.trim()}
+            >
               Upload Video
             </Button>
           </div>
