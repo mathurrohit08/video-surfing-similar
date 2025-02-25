@@ -1,4 +1,3 @@
-
 import { Categories } from "@/components/Categories";
 import { SearchBar } from "@/components/SearchBar";
 import { VideoCard } from "@/components/VideoCard";
@@ -6,13 +5,15 @@ import { videos } from "@/data/videos";
 import { useSearchParams } from "react-router-dom";
 import { UserNav } from "@/components/UserNav";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Upload } from "lucide-react";
+import { Menu, PlusCircle, Upload } from "lucide-react";
 import { useState, useCallback, useRef } from "react";
 import { Video } from "@/types/video";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const [searchParams] = useSearchParams();
@@ -101,8 +102,10 @@ const Index = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
+    <div className="min-h-screen bg-background transition-colors duration-300">
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800 dark:from-slate-900 dark:to-slate-700 opacity-20"></div>
+      
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-2 sm:px-4 py-2 sm:py-4">
           <div className="flex items-center justify-between gap-2 sm:gap-4">
             <h1 className="heading-responsive font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 animate-gradient truncate">
@@ -111,15 +114,32 @@ const Index = () => {
             <div className="flex-1 max-w-2xl">
               <SearchBar />
             </div>
-            <UserNav />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserNav />
+            </div>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 animate-fade-in">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <div className="w-full sm:w-auto overflow-x-auto scrollbar-thin">
-            <Categories />
+          <div className="w-full sm:w-auto">
+            <div className="block sm:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Menu className="h-4 w-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-64">
+                  <Categories />
+                </SheetContent>
+              </Sheet>
+            </div>
+            <div className="hidden sm:block overflow-x-auto scrollbar-thin">
+              <Categories />
+            </div>
           </div>
           <Button
             className="group relative overflow-hidden w-full sm:w-auto"
@@ -127,7 +147,7 @@ const Index = () => {
             onClick={() => setIsUploadOpen(true)}
           >
             <PlusCircle className="mr-2 h-4 w-4" />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 animate-gradient group-hover:bg-gradient-to-l transition-all duration-500 text-responsive">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 animate-gradient group-hover:bg-gradient-to-l transition-all duration-500">
               Add Video
             </span>
           </Button>
@@ -195,4 +215,3 @@ const Index = () => {
 };
 
 export default Index;
-
