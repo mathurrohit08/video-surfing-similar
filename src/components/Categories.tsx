@@ -34,21 +34,22 @@ export const Categories = () => {
   };
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+    <ul className="flex sm:flex-row flex-col gap-2">
       {categories.map((category) => (
-        <Button
-          key={category}
-          variant="secondary"
-          onClick={() => handleCategoryClick(category)}
-          className={`rounded-full px-4 py-2 whitespace-nowrap transition-colors ${
-            currentCategory === category
-              ? "bg-gray-900 text-white hover:bg-gray-800"
-              : "hover:bg-gray-200"
-          }`}
-        >
-          {category}
-        </Button>
+        <li key={category}>
+          <Button
+            variant="secondary"
+            onClick={() => handleCategoryClick(category)}
+            className={`w-full sm:w-auto rounded-full px-4 py-2 whitespace-nowrap transition-colors ${
+              currentCategory === category
+                ? "bg-gray-900 text-white hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+                : "hover:bg-gray-200 dark:hover:bg-gray-800"
+            }`}
+          >
+            {category}
+          </Button>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };

@@ -133,7 +133,12 @@ const Index = () => {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-64">
-                  <Categories />
+                  <div className="h-full flex flex-col">
+                    <h2 className="text-lg font-semibold mb-4">Categories</h2>
+                    <nav className="flex-1 overflow-y-auto scrollbar-auto-hide">
+                      <Categories />
+                    </nav>
+                  </div>
                 </SheetContent>
               </Sheet>
             </div>
